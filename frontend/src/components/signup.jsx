@@ -15,7 +15,7 @@ const getRoles = async() => {
     })
 };
 
-const getExperience= async() => {
+const getExperience = async() => {
   return await axios.get("/experience")
     .then(res => {
       return res.data;
@@ -24,6 +24,16 @@ const getExperience= async() => {
       console.log(err);
     })
 };
+
+const checkUsername = async(username) => {
+  return await axios.get("/checkUser/" + username)
+    .then(res => {
+      return res.data;
+    })
+    .catch(err => {
+      console.log(err);
+    })
+}
 
 const Signup = () => {
     const [userInfo, setUserInfo] = useState({});
@@ -53,8 +63,15 @@ const Signup = () => {
         } else if (!emailRegex.test(userInfo.email)) {
           setWarningDisplay("Please provide a valid email")
         } else {
-          // Register users thru a post request
-          axios.post("/signup", { userInfo }).then(response => console.log(response))
+          // Check if username is already taken
+          checkUsername(userInfo.username).then(res => {
+            if (res !== "") {
+              setWarningDisplay("Username is already taken")
+            } else {
+              // Register users thru a post request
+              axios.post("/signup", { userInfo }).then(response => console.log(response))
+            }
+          })  
         }
     }
 

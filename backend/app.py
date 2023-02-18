@@ -75,6 +75,15 @@ def logout():
 def user():
     pass
 
+@app.route('/checkUser/<username>', methods=['GET'])
+def checkUser(username):
+    con = sqlite3.connect("database.db")
+    cur = con.cursor()
+    result = cur.execute('''SELECT username FROM Users WHERE username = ?''', [username]).fetchone()
+    if result:
+        return result[0]
+    return ""
+
 @app.route('/roles', methods=['GET'])
 def getAllRoles():
     con = sqlite3.connect("database.db")
