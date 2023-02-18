@@ -28,10 +28,9 @@ const Signup = () => {
     const [roles, setRoles] = useState([]);
     const [experience, setExperience] = useState([]);
 
-    const handleSubmit = () => {
-        axios.post('/signup', {
-            userInfo
-        }).then(response => console.log(response))
+    const handleSubmit = (e) => {
+        e.preventDefault()
+        axios.post("/signup", { userInfo }).then(response => console.log(response))
     }
 
     const updateUserInfo = (e) => {
@@ -134,7 +133,7 @@ const Signup = () => {
 
             <label>
               Role:
-              <select name="role" value={userInfo.role ? userInfo.role : ""} onChange={updateUserInfo}>
+              <select name="role_id" value={userInfo.role_id ? userInfo.role_id : ""} onChange={updateUserInfo}>
                 <option hidden>Select Role</option>
                 {roleOptions}
               </select>
@@ -142,7 +141,7 @@ const Signup = () => {
 
             <label>
               Experience:
-              <select name="experience" value={userInfo.experience ? userInfo.experience : ""} onChange={updateUserInfo}>
+              <select name="experience_id" value={userInfo.experience_id ? userInfo.experience_id : ""} onChange={updateUserInfo}>
                 <option hidden>Select Experience</option>
                 {experienceOptions}
               </select>
