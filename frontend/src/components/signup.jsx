@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
+import '../styles/signup.scss';
+import '../styles/global.scss';
 
 axios.defaults.baseURL = "http://localhost:3001";
 
@@ -61,96 +63,102 @@ const Signup = () => {
     })
 
     return(
-        <div>
-          <form onSubmit={handleSubmit}>
+        <div className="signup-main">
+          <form onSubmit={handleSubmit} className="signup-form">
             <h1>Signup</h1>
 
-            <label>
-              Username:
+            {/* <label>
+              Username: */}
               <input 
                 type="text"
                 placeholder="Username" 
                 name="username"
                 value={userInfo.username ? userInfo.username : ""}
                 onChange={updateUserInfo}
+                required
                 />
-            </label>
+            {/* </label> */}
 
-            <label>
-              Password:
+            {/* <label>
+              Password: */}
               <input 
                 type="password"
                 placeholder="Password" 
                 name="password"
                 value={userInfo.password ? userInfo.password : ""}
                 onChange={updateUserInfo}
+                required
               />
-            </label>
+            {/* </label> */}
 
-            <label>
-              Confirm Password:
+            {/* <label>
+              Confirm Password: */}
               <input 
                 type="password"
                 placeholder="Confirm Password" 
                 name="cpassword"
                 value={userInfo.cpassword ? userInfo.cpassword : ""}
                 onChange={updateUserInfo}
+                required
               />
-            </label>
+            {/* </label> */}
 
-            <label>
-              First Name:
+            {/* <label>
+              First Name: */}
               <input 
                 type="text"
                 placeholder="First Name" 
                 name="first_name"
                 value={userInfo.first_name ? userInfo.first_name : ""}
                 onChange={updateUserInfo}
+                required
               />
-            </label>
+            {/* </label> */}
 
-            <label>
-              Last Name:
+            {/* <label>
+              Last Name: */}
               <input 
                 type="text"
                 placeholder="Last Name" 
                 name="last_name"
                 value={userInfo.last_name ? userInfo.last_name : ""}
                 onChange={updateUserInfo}
+                required
               />
-            </label>
+            {/* </label> */}
 
-            <label>
-              Email:
+            {/* <label>
+              Email: */}
               <input 
                 type="text"
                 placeholder="Email" 
                 name="email"
                 value={userInfo.email ? userInfo.email : ""}
                 onChange={updateUserInfo}
+                required
               />
-            </label>
+            {/* </label> */}
 
-            <label>
-              Role:
-              <select name="role_id" value={userInfo.role_id ? userInfo.role_id : ""} onChange={updateUserInfo}>
+            {/* <label>
+              Role: */}
+              <select name="role_id" value={userInfo.role_id ? userInfo.role_id : ""} onChange={updateUserInfo} required>
                 <option hidden>Select Role</option>
                 {roleOptions}
               </select>
-            </label>
+            {/* </label> */}
 
-            <label>
-              Experience:
-              <select name="experience_id" value={userInfo.experience_id ? userInfo.experience_id : ""} onChange={updateUserInfo}>
+            {/* <label>
+              Experience: */}
+              <select name="experience_id" value={userInfo.experience_id ? userInfo.experience_id : ""} onChange={updateUserInfo} required>
                 <option hidden>Select Experience</option>
                 {experienceOptions}
               </select>
-            </label>
+            {/* </label> */}
 
-            <input type="submit" value="submit"/>
+            <input type="submit" value="Register"/>
 
           </form>
-          <span>Already have an account? <a href='./'>Login</a></span>
+          <div className="signup-login">Already have an account? <a href='./'>Login</a></div>
         </div>
     );
 }
