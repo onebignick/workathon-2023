@@ -1,30 +1,14 @@
-import axios from "axios";
-import { useState, useEffect } from "react";
+import '../styles/home.scss';
 import { useNavigate } from "react-router-dom";
 
 const Home = () => {
-    const [data, setData] = useState();
     const navigate = useNavigate();
-
-    useEffect(() => {
-        axios.get('/user')
-        .then((response) => {
-            if (!response.data) {
-                navigate('/')
-            } else {
-                setData(response.data)
-            }
-        })
-    }, [data])
-
-    const handleLogout = () => {
-        axios.post('/logout').then((response) => setData(response.data));
-    }
 
     return(
         <div>
-            Hello World!
-            <button onClick={handleLogout}>Logout</button>
+            <h1>Are you ready to find your dream job?</h1>
+            <button onClick={()=>navigate('/login')}>Log in</button>
+            <button onclick={()=>navigate('/signup')}>Sign up</button>
         </div>
     );
 };
