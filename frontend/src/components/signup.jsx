@@ -1,10 +1,32 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 
+axios.defaults.baseURL = "http://localhost:3001";
+
+const getRoles = async() => {
+  return await axios.get("/roles")
+    .then(res => {
+      return res.data;
+    })
+    .catch(err => {
+      console.log(err);
+    })
+};
+
+const getExperience= async() => {
+  return await axios.get("/experience")
+    .then(res => {
+      return res.data;
+    })
+    .catch(err => {
+      console.log(err);
+    })
+};
+
 const Signup = () => {
-    // const [username, setUsername] = useState('');
-    // const [password, setPassword] = useState('');
     const [userInfo, setUserInfo] = useState({});
+    const [roles, setRoles] = useState([]);
+    const [experience, setExperience] = useState([]);
 
     const handleSubmit = () => {
         axios.post('/signup', {
@@ -16,11 +38,29 @@ const Signup = () => {
       setUserInfo(prev => {
         return {
           ...prev,
-          [e.target.name]: e.target.value,
+          [e.target.name]: e.target.name === "role" || e.target.name === "experience" ? parseInt(e.target.value) : e.target.value,
         }
       })
     }
-    console.log(userInfo)
+
+    useEffect(() => {
+      getRoles().then(result => {
+        setRoles(result)
+      })
+
+      getExperience().then(result => {
+        setExperience(result)
+      })
+    }, [])
+
+    const roleOptions = roles.map(role => {
+      return <option key={role[0]} value={role[0]} >{role[1]}</option>
+    })
+
+    const experienceOptions = experience.map(exp => {
+      return <option key={exp[0]} value={exp[0]} >{exp[1]}</option>
+    })
+
     return(
         <div>
           <form onSubmit={handleSubmit}>
@@ -95,14 +135,16 @@ const Signup = () => {
             <label>
               Role:
               <select name="role" value={userInfo.role ? userInfo.role : ""} onChange={updateUserInfo}>
-
+                <option hidden>Select Role</option>
+                {roleOptions}
               </select>
             </label>
 
             <label>
               Experience:
               <select name="experience" value={userInfo.experience ? userInfo.experience : ""} onChange={updateUserInfo}>
-                
+                <option hidden>Select Experience</option>
+                {experienceOptions}
               </select>
             </label>
 
