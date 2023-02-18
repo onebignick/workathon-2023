@@ -42,4 +42,4 @@ cur.execute('''INSERT INTO Experience (experience) VALUES
             
 con.commit()
 
-cur.close()
+con.close()
