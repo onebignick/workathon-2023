@@ -181,7 +181,7 @@ const Signup = () => {
             <input type="submit" value="Register"/>
 
           </form>
-          <div className="signup-login">Already have an account? <a href='./'>Login</a></div>
+          <div className="signup-login">Already have an account? <a href='./login'>Login</a></div>
         </div>
     );
 }

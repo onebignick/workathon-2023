@@ -2,18 +2,47 @@ from flask import Flask, request, abort
 from flask_cors import CORS
 import sqlite3
 import bcrypt
+from flask_login import LoginManager, UserMixin, login_user, logout_user
 
 app = Flask(__name__)
+app.secret_key = "secret"
 #------------------------------------END OF IMPORTS-----------------------------------
 
 #------------------------------------START OF MIDDLEWARE-------------------------------
 CORS(app)
+login_manager = LoginManager()
+login_manager.init_app(app)
+
+class User(UserMixin):
+    def __init__ (self, id):
+        self.id = id
+
+@login_manager.user_loader
+def user_loader():
+    return 
 #------------------------------------END OF MIDDLEWARE----------------------------
 
 # -----------------------------------START OF ROUTES----------------------------
 @app.route('/login', methods=['POST'])
 def login():
-    pass
+    username = request.json['username']
+    password = request.json['password']
+
+    bytes = password.encode('utf-8')
+
+    con = sqlite3.connect("database.db")
+    cur = con.cursor()
+
+    result = cur.execute('''SELECT id, password FROM Users WHERE username = ?''', [username]).fetchone()
+    con.commit()
+    con.close()
+    if result and bcrypt.checkpw(bytes, result[1]):
+            user = User(result[0])
+            login_user(user)
+            return "Authenticated", 200
+    
+    abort(401, description="Unauthenticated user")
+    
 
 @app.route('/signup', methods=['POST'])
 def signup():
@@ -40,7 +69,7 @@ def signup():
 
 @app.route('/logout', methods=['POST'])
 def logout():
-    pass
+    logout_user()
 
 @app.route('/user', methods=['GET'])
 def user():
