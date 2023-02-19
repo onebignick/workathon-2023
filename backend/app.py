@@ -1,8 +1,9 @@
-from flask import Flask, request, abort
+from flask import Flask, request, abort, session
 from flask_cors import CORS
 import sqlite3
 import bcrypt
-from flask_login import LoginManager, UserMixin, login_user, logout_user
+from flask_login import LoginManager, UserMixin, login_user, logout_user, login_required
+from datetime import timedelta
 
 app = Flask(__name__)
 app.secret_key = "secret"
@@ -18,7 +19,12 @@ class User(UserMixin):
         self.id = id
 
 @login_manager.user_loader
-def user_loader():
+def user_loader(id):
+    con = sqlite3.connect("database.db")
+    cur = con.cursor()
+    user_id = cur.execute('''SELECT id FROM Users WHERE id = ?''', [int(id)]).fetchone()
+    if (user_id):
+        return User(str(user_id[0]))
     return 
 #------------------------------------END OF MIDDLEWARE----------------------------
 
@@ -32,13 +38,13 @@ def login():
 
     con = sqlite3.connect("database.db")
     cur = con.cursor()
-
     result = cur.execute('''SELECT id, password FROM Users WHERE username = ?''', [username]).fetchone()
     con.commit()
     con.close()
+
     if result and bcrypt.checkpw(bytes, result[1]):
-            user = User(result[0])
-            login_user(user)
+            user = User(str(result[0]))
+            login_user(user, remember=True, duration=timedelta(hours=1))
             return "Authenticated", 200
     
     abort(401, description="Unauthenticated user")
@@ -68,8 +74,10 @@ def signup():
         return "New user successfully registered", 201
 
 @app.route('/logout', methods=['POST'])
+@login_required
 def logout():
     logout_user()
+    return "Successfully logged out", 200
 
 @app.route('/user', methods=['GET'])
 def user():

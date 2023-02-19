@@ -25,7 +25,8 @@ const Login = () => {
             if (!response.data) {
                 setError('Invalid username or password');
             } else {
-                setData(response.data)
+                console.log(response.data)
+                //setData(response.data)
             }
         });
     }
